@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video-Browser: Towards Agentic Open-web Video Browsing</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #20c997;
+            --secondary-color: #009879;
+            --text-color: #333;
+            --bg-color: #ffffff;
+            --light-bg: #f8f9fa;
+            --border-color: #dddddd;
+            --best-color: #d63031;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding-top: 70px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            gap: 20px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                padding: 20px 0;
+                text-align: center;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li { margin: 10px 0; }
+            .menu-toggle { display: block; }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .author-block {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .affiliation-block {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .button-block {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-info { background-color: #17a2b8; color: white; }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            opacity: 0.9;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: #222;
+        }
+
+        .abstract-box {
+            background-color: var(--light-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: justify;
+        }
+
+        .leaderboard-container {
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .leaderboard-table thead tr {
+            background-color: var(--secondary-color);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .leaderboard-table tbody tr:nth-of-type(even) {
+            background-color: #f9f9f9;
+        }
+
+        .leaderboard-table tbody tr:last-of-type {
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .leaderboard-table tbody tr:hover {
+            background-color: #f1f1f1;
+            transition: background-color 0.2s ease;
+        }
+
+        .best-score {
+            font-weight: bold;
+            color: var(--best-color);
+        }
+
+        .category-header {
+            text-align: left !important;
+            background-color: #eee;
+            font-weight: bold;
+        }
+
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .btn { width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="#" class="nav-logo">Video-BrowseComp</a>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#" class="nav-link">Home</a></li>
+            <li><a href="#abstract" class="nav-link">Abstract</a></li>
+            <li><a href="#method" class="nav-link">Method</a></li>
+            <li><a href="#examples" class="nav-link">Examples</a></li>
+            <li><a href="#statistics" class="nav-link">Statistics</a></li>
+            <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+            <li><a href="#submission" class="nav-link">Submission</a></li>
+            <li><a href="#citation" class="nav-link">Citation</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <header>
+        <h1>Video-Browser: Towards Agentic Open-web Video Browsing</h1>
+        
+        <div class="author-block">
+            <strong>Zhengyang Liang<sup>1,♣</sup>, Yan Shu<sup>2,♣</sup>, Xiangrui Liu<sup>3</sup>, Minghao Qin<sup>3</sup>, Nicu Sebe<sup>2</sup>, Zheng Liu<sup>4</sup>, Lizi Liao<sup>1</sup></strong>
+        </div>
+
+        <div class="affiliation-block">
+            <sup>1</sup>Singapore Management University, <sup>2</sup>University of Trento, <br>
+            <sup>3</sup>Beijing Academy of Artificial Intelligence, <sup>4</sup>Hong Kong Polytechnic University
+        </div>
+
+        <div class="button-block">
+            <a href="https://arxiv.org/abs/2512.23044" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Paper</a>
+            <a href="https://huggingface.co/datasets/chr1ce/Video-Browsecomp" class="btn btn-info"><i class="fas fa-database"></i> Benchmark</a>
+            <a href="https://github.com/chrisx599/Video-Browser" class="btn btn-primary"><i class="fab fa-github"></i> Code</a>
+        </div>
+    </header>
+
+    <section id="abstract">
+        <h2>Abstract</h2>
+        <div class="abstract-box">
+            The evolution of autonomous agents is redefining information seeking, transitioning from passive retrieval to proactive, open-ended web research. However, while textual and static multimodal agents have seen rapid progress, a significant modality gap remains in the web's most dynamic modality: video. Existing video benchmarks predominantly focus on passive perception, feeding curated clips to models without requiring external retrieval. They fail to evaluate agentic video research, which necessitates actively interrogating video timelines, cross-referencing dispersed evidence, and verifying claims against the open web. 
+            <br><br>
+            To bridge this gap, we present <strong>Video-BrowseComp</strong>, a challenging benchmark comprising 210 questions tailored for open-web agentic video reasoning. Unlike prior benchmarks, Video-BrowseComp enforces a mandatory dependency on temporal visual evidence, ensuring that answers cannot be derived solely through text search but require navigating video timelines to verify external claims. Our evaluation of state-of-the-art models reveals a critical bottleneck: even advanced search-augmented models like GPT-5.1 (w/ Search) achieve only 15.24% accuracy. Our analysis reveals that these models largely rely on textual proxies, excelling in metadata-rich domains (e.g., TV shows with plot summaries) but collapsing in metadata-sparse, dynamic environments (e.g., sports, gameplay) where visual grounding is essential. As the first open-web video research benchmark, Video-BrowseComp advances the field beyond passive perception toward proactive video reasoning.
+        </div>
+    </section>
+
+    <section id="method">
+        <h2>Video-Browser Agent</h2>
+        <div class="abstract-box" style="background-color: #f0f7ff; border-left-color: #0056b3;">
+            <p>
+                To tackle the challenges of open-web agentic video research, we propose <strong>Video-Browser</strong>, an agentic framework composed of three specialized modules sharing a global memory:
+            </p>
+            <ul>
+                <li><strong>Planner:</strong> Acts as the cognitive controller, decomposing user queries into sequential sub-tasks and generating search queries based on interaction history.</li>
+                <li><strong>Watcher:</strong> Functions as a high-efficiency filter and localizer using a <strong>Pyramidal Perception</strong> mechanism. It progressively prunes the search space through <em>Semantic Filtering</em> (Stage I), <em>Sparse Localization</em> (Stage II), and <em>Zoom-in</em> (Stage III) to identify and decode relevant visual evidence without overwhelming computational costs.</li>
+                <li><strong>Analyst:</strong> Synthesizes the final answer by reasoning over the accumulated multimodal evidence and the query context.</li>
+            </ul>
+            <p>
+                This architecture enables Video-Browser to actively interrogate video timelines and cross-reference dispersed evidence, achieving a <strong>71.8% relative improvement</strong> over state-of-the-art search-augmented models (26.19% vs 15.24% accuracy).
+            </p>
+        </div>
+    </section>
+
+    <section id="examples">
+        <h2>Examples</h2>
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="/images/videobc_cases.jpg" alt="Video-BrowseComp Examples" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">Figure 1: Examples of questions and tasks in Video-BrowseComp.</p>
+        </div>
+    </section>
+
+    <section id="statistics">
+        <h2>Dataset Statistics</h2>
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="/images/videobc_statics.jpg" alt="Video-BrowseComp Statistics" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">Figure 2: Distribution of video categories and difficulty levels.</p>
+        </div>
+    </section>
+
+    <section id="leaderboard">
+        <h2>Leaderboard</h2>
+        <p>We evaluate state-of-the-art models on Video-BrowseComp. The accuracy (%) is reported for Overall (OA) and three difficulty levels (Level 1, Level 2, Level 3).</p>
+        
+        <!-- Interactive Controls Style -->
+        <style>
+            .filter-controls { margin-bottom: 20px; text-align: left; }
+            .filter-btn {
+                background-color: #f8f9fa;
+                border: 1px solid #ddd;
+                padding: 8px 16px;
+                margin-right: 8px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 0.9em;
+                transition: all 0.2s;
+            }
+            .filter-btn:hover { background-color: #e2e6ea; }
+            .filter-btn.active {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+            .sortable { cursor: pointer; user-select: none; }
+            .sortable:hover { background-color: rgba(0,0,0,0.05); }
+            .sort-icon { display: inline-block; width: 15px; margin-left: 5px; text-align: center; }
+        </style>
+
+        <div class="filter-controls">
+            <span style="font-weight: bold; margin-right: 10px;">Filter:</span>
+            <button class="filter-btn active" onclick="filterData('All')">All</button>
+            <button class="filter-btn" onclick="filterData('Tool-Free')">Tool-Free</button>
+            <button class="filter-btn" onclick="filterData('Search')">Search Models</button>
+        </div>
+        
+        <div class="leaderboard-container">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" onclick="sortData('name')">Model <span id="sort-name" class="sort-icon"></span></th>
+                        <th class="sortable" onclick="sortData('oa')">Overall Acc (%) <span id="sort-oa" class="sort-icon"></span></th>
+                        <th class="sortable" onclick="sortData('l1')">Level 1 (%) <span id="sort-l1" class="sort-icon"></span></th>
+                        <th class="sortable" onclick="sortData('l2')">Level 2 (%) <span id="sort-l2" class="sort-icon"></span></th>
+                        <th class="sortable" onclick="sortData('l3')">Level 3 (%) <span id="sort-l3" class="sort-icon"></span></th>
+                        <th class="sortable" onclick="sortData('ce')">Calibration Error (%) <span id="sort-ce" class="sort-icon"></span></th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="submission">
+        <h2>Submission Guide</h2>
+        <div class="abstract-box" style="border-left: 5px solid #17a2b8;">
+            <p>We welcome submissions of new models to the Video-BrowseComp leaderboard! To submit your results, please follow these steps:</p>
+            <ol>
+                <li>Run your model on the <strong>Video-BrowseComp</strong> benchmark available on <a href="https://huggingface.co/datasets/chr1ce/Video-Browsecomp">Hugging Face</a>.</li>
+                <li>Prepare a JSON file containing your model's predictions and the calculated accuracy for each level.</li>
+                <li>Email your results, including model details (name, size, type) and a link to your paper or project page, to our team.</li>
+            </ol>
+            <p><strong>Contact us for submission:</strong></p>
+            <ul>
+                <li>Zhengyang Liang: <a href="mailto:zyliang@smu.edu.sg">zyliang@smu.edu.sg</a></li>
+                <li>Yan Shu: <a href="mailto:yan.shu@unitn.it">yan.shu@unitn.it</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="citation">
+        <h2>Citation</h2>
+        <pre><code>@misc{liang2026videobrowseragenticopenwebvideo,
+      title={Video-Browser: Towards Agentic Open-web Video Browsing}, 
+      author={Zhengyang Liang and Yan Shu and Xiangrui Liu and Minghao Qin and Kaixin Liang and Nicu Sebe and Zheng Liu and Lizi Liao},
+      year={2026},
+      eprint={2512.23044},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2512.23044}, 
+}</code></pre>
+    </section>
+
+    <footer>
+        &copy; 2025 Video-BrowseComp Team. All rights reserved.
+    </footer>
+</div>
+
+<script>
+    // Data definition
+    const leaderboardData = [
+        // Tool-Free Models
+        { name: "Qwen3-VL-8B-Thinking", type: "Tool-Free", oa: 7.14, l1: 12.00, l2: 0.00, l3: 0.00, ce: 52.49 },
+        { name: "Qwen3-VL-235B-A22B-Instruct", type: "Tool-Free", oa: 13.33, l1: 22.40, l2: 0.00, l3: 0.00, ce: 77.64 },
+        { name: "GLM-4.6V", type: "Tool-Free", oa: 10.95, l1: 16.80, l2: 3.23, l3: 0.00, ce: 44.40 },
+        { name: "gpt-4o-2024-11-20", type: "Tool-Free", oa: 17.62, l1: 28.00, l2: 3.23, l3: 0.00, ce: 58.81 },
+        { name: "gpt-4o-mini-2024-07-18", type: "Tool-Free", oa: 9.52, l1: 16.00, l2: 0.00, l3: 0.00, ce: 63.55 },
+        { name: "gpt-5-mini-2025-08-07", type: "Tool-Free", oa: 15.71, l1: 26.40, l2: 0.00, l3: 0.00, ce: 37.47 },
+        { name: "gemini-2.5-flash-2025-06", type: "Tool-Free", oa: 16.67, l1: 27.20, l2: 1.61, l3: 0.00, ce: 77.79 },
+        { name: "gemini-2.5-pro-2025-06", type: "Tool-Free", oa: 19.52, l1: 31.20, l2: 3.23, l3: 0.00, ce: 79.18 },
+        // Search Models
+        { name: "gemini-2.5-flash-2025-06 (w/ Search)", type: "Search", oa: 20.95, l1: 32.80, l2: 4.84, l3: 0.00, ce: 35.98 },
+        { name: "gemini-2.5-pro-2025-06 (w/ Search)", type: "Search", oa: 23.81, l1: 37.60, l2: 4.84, l3: 0.00, ce: 31.45 },
+        { name: "gpt-5.1-2025-11-13 (w/ Search)", type: "Search", oa: 15.24, l1: 21.60, l2: 6.45, l3: 4.35, ce: 30.20 },
+        { name: "o4-mini-deep-research-2025-06-26", type: "Search", oa: 22.86, l1: 30.40, l2: 12.90, l3: 8.70, ce: 42.55 }
+    ];
+
+    let currentFilter = 'All';
+    let currentSort = { column: 'oa', direction: 'desc' };
+
+    function initTable() {
+        renderTable();
+    }
+
+    function filterData(type) {
+        currentFilter = type;
+        // Update button states
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => {
+            if (btn.innerText.includes(type) || (type === 'All' && btn.innerText === 'All')) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        renderTable();
+    }
+
+    function sortData(column) {
+        if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.column = column;
+            currentSort.direction = 'desc'; // Default to desc for numbers
+            if (column === 'name') currentSort.direction = 'asc';
+            if (column === 'ce') currentSort.direction = 'asc'; // Lower CE is better usually, but here we sort by value. 
+                                                               // User might want to see lowest error first.
+        }
+        renderTable();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('leaderboard-body');
+        tbody.innerHTML = '';
+
+        // 1. Filter
+        let filteredData = leaderboardData.filter(item => {
+            if (currentFilter === 'All') return true;
+            return item.type.includes(currentFilter); // Matches "Tool-Free" or "Search"
+        });
+
+        // 2. Sort
+        filteredData.sort((a, b) => {
+            let valA = a[currentSort.column];
+            let valB = b[currentSort.column];
+
+            if (typeof valA === 'string') {
+                valA = valA.toLowerCase();
+                valB = valB.toLowerCase();
+            }
+
+            if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+            if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        // 4. Update Sort Icons
+        document.querySelectorAll('.sort-icon').forEach(icon => icon.innerText = '');
+        const sortIcon = document.getElementById(`sort-${currentSort.column}`);
+        if (sortIcon) sortIcon.innerText = currentSort.direction === 'asc' ? '▲' : '▼';
+
+        // 5. Render Rows
+        filteredData.forEach(item => {
+            const row = document.createElement('tr');
+            
+            const cellContent = (val, key) => {
+                if (key === 'name') return val;
+                return val.toFixed(2);
+            };
+
+            row.innerHTML = `
+                <td style="text-align: left;">${item.name}</td>
+                <td>${cellContent(item.oa, 'oa')}</td>
+                <td>${cellContent(item.l1, 'l1')}</td>
+                <td>${cellContent(item.l2, 'l2')}</td>
+                <td>${cellContent(item.l3, 'l3')}</td>
+                <td>${cellContent(item.ce, 'ce')}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function toggleMenu() {
+        const navLinks = document.getElementById('nav-links');
+        navLinks.classList.toggle('active');
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', initTable);
+</script>
+
+</body>
+</html>
