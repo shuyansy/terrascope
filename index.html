@@ -370,76 +370,27 @@
     </div>
 </section>
 
-    <section id="leaderboard">
-        <h2>Leaderboard</h2>
-        <p>We evaluate state-of-the-art models on Video-BrowseComp. The accuracy (%) is reported for Overall (OA) and three difficulty levels (Level 1, Level 2, Level 3).</p>
-        
-        <!-- Interactive Controls Style -->
-        <style>
-            .filter-controls { margin-bottom: 20px; text-align: left; }
-            .filter-btn {
-                background-color: #f8f9fa;
-                border: 1px solid #ddd;
-                padding: 8px 16px;
-                margin-right: 8px;
-                border-radius: 20px;
-                cursor: pointer;
-                font-size: 0.9em;
-                transition: all 0.2s;
-            }
-            .filter-btn:hover { background-color: #e2e6ea; }
-            .filter-btn.active {
-                background-color: var(--primary-color);
-                color: white;
-                border-color: var(--primary-color);
-            }
-            .sortable { cursor: pointer; user-select: none; }
-            .sortable:hover { background-color: rgba(0,0,0,0.05); }
-            .sort-icon { display: inline-block; width: 15px; margin-left: 5px; text-align: center; }
-        </style>
+<section id="leaderboard">
+    <h2>Experiments</h2>
+    <div class="abstract-box" style="background-color: #f5f0ff; border-left-color: #7c3aed;">
+        <p>
+            We evaluate TerraScope against general VLMs, EO-specific VLMs, and fine-tuned VLMs across three benchmarks:
+        </p>
+        <ul>
+            <li><strong>TerraScope-Bench (optical only):</strong> Six fine-grained spatial reasoning tasks — Coverage Analysis, Area Quantification, Comparative Ranking, Boundary Relationship Detection, Distance Measurement, and Building Change Estimation.</li>
+            <li><strong>Landsat30AU:</strong> Land-use understanding tasks including Appearance Recognition, Numerical Reasoning, and Spatial Relationship Inference.</li>
+            <li><strong>DisasterM3:</strong> Disaster assessment tasks covering Building Damage Classification and Damage Ratio Estimation.</li>
+        </ul>
+        <p>
+            TerraScope (8B) achieves <strong>68.9%</strong> average accuracy on TerraScope-Bench, <strong>73.9%</strong> on Landsat30AU, and <strong>46.5%</strong> on DisasterM3, consistently outperforming all baselines including proprietary models like GPT-4o and reasoning models like GLM-4.1V-Think.
+        </p>
+    </div>
+    <div style="text-align: center; margin: 20px 0;">
+        <img src="assets/experiments.png" alt="TerraScope Experimental Results" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <p style="font-size: 0.9em; color: #666; margin-top: 10px;">Table 1: Quantitative performance of TerraScope on TerraScope-Bench, Landsat30AU, and DisasterM3.</p>
+    </div>
+</section>
 
-        <div class="filter-controls">
-            <span style="font-weight: bold; margin-right: 10px;">Filter:</span>
-            <button class="filter-btn active" onclick="filterData('All')">All</button>
-            <button class="filter-btn" onclick="filterData('Tool-Free')">Tool-Free</button>
-            <button class="filter-btn" onclick="filterData('Search')">Search Models</button>
-        </div>
-        
-        <div class="leaderboard-container">
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th class="sortable" onclick="sortData('name')">Model <span id="sort-name" class="sort-icon"></span></th>
-                        <th class="sortable" onclick="sortData('oa')">Overall Acc (%) <span id="sort-oa" class="sort-icon"></span></th>
-                        <th class="sortable" onclick="sortData('l1')">Level 1 (%) <span id="sort-l1" class="sort-icon"></span></th>
-                        <th class="sortable" onclick="sortData('l2')">Level 2 (%) <span id="sort-l2" class="sort-icon"></span></th>
-                        <th class="sortable" onclick="sortData('l3')">Level 3 (%) <span id="sort-l3" class="sort-icon"></span></th>
-                        <th class="sortable" onclick="sortData('ce')">Calibration Error (%) <span id="sort-ce" class="sort-icon"></span></th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <!-- Rows will be populated by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section id="submission">
-        <h2>Submission Guide</h2>
-        <div class="abstract-box" style="border-left: 5px solid #17a2b8;">
-            <p>We welcome submissions of new models to the Video-BrowseComp leaderboard! To submit your results, please follow these steps:</p>
-            <ol>
-                <li>Run your model on the <strong>Video-BrowseComp</strong> benchmark available on <a href="https://huggingface.co/datasets/chr1ce/Video-Browsecomp">Hugging Face</a>.</li>
-                <li>Prepare a JSON file containing your model's predictions and the calculated accuracy for each level.</li>
-                <li>Email your results, including model details (name, size, type) and a link to your paper or project page, to our team.</li>
-            </ol>
-            <p><strong>Contact us for submission:</strong></p>
-            <ul>
-                <li>Zhengyang Liang: <a href="mailto:zyliang@smu.edu.sg">zyliang@smu.edu.sg</a></li>
-                <li>Yan Shu: <a href="mailto:yan.shu@unitn.it">yan.shu@unitn.it</a></li>
-            </ul>
-        </div>
-    </section>
 
     <section id="citation">
         <h2>Citation</h2>
