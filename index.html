@@ -312,21 +312,24 @@
     </section>
 
     <section id="method">
-        <h2>Video-Browser Agent</h2>
-        <div class="abstract-box" style="background-color: #f0f7ff; border-left-color: #0056b3;">
-            <p>
-                To tackle the challenges of open-web agentic video research, we propose <strong>Video-Browser</strong>, an agentic framework composed of three specialized modules sharing a global memory:
-            </p>
-            <ul>
-                <li><strong>Planner:</strong> Acts as the cognitive controller, decomposing user queries into sequential sub-tasks and generating search queries based on interaction history.</li>
-                <li><strong>Watcher:</strong> Functions as a high-efficiency filter and localizer using a <strong>Pyramidal Perception</strong> mechanism. It progressively prunes the search space through <em>Semantic Filtering</em> (Stage I), <em>Sparse Localization</em> (Stage II), and <em>Zoom-in</em> (Stage III) to identify and decode relevant visual evidence without overwhelming computational costs.</li>
-                <li><strong>Analyst:</strong> Synthesizes the final answer by reasoning over the accumulated multimodal evidence and the query context.</li>
-            </ul>
-            <p>
-                This architecture enables Video-Browser to actively interrogate video timelines and cross-reference dispersed evidence, achieving a <strong>71.8% relative improvement</strong> over state-of-the-art search-augmented models (26.19% vs 15.24% accuracy).
-            </p>
+    <h2>Method</h2>
+    <div class="abstract-box" style="background-color: #f0f7ff; border-left-color: #0056b3;">
+        <p>
+            We propose <strong>TerraScope</strong>, a unified vision-language framework for <em>pixel-grounded visual reasoning</em> in geospatial understanding. Unlike traditional VLMs that rely on language-only reasoning chains, TerraScope explicitly generates segmentation masks and grounds reasoning in the selected masked visual space.
+        </p>
+        <ul>
+            <li><strong>Pixel-Grounded Chain-of-Thought:</strong> A cooperative mechanism between dual decoders that interleaves segmentation mask generation with text generation. Upon detecting <code>[SEG]</code> tokens, the mask decoder predicts segmentation masks, from which masked visual tokens are selected and injected back into the reasoning sequence.</li>
+            <li><strong>Dynamic Visual Feature Extraction:</strong> Generated masks are aligned to the vision encoder's dynamic patch layout and resized to the token grid. Visual tokens covered &gt;50% by the mask are selected, projected, and fed into the LLM to resume autoregressive generation conditioned on the KV cache.</li>
+            <li><strong>Multi-Modal &amp; Temporal Reasoning:</strong> For optical-SAR pairs, a text-guided, token-level modality selection mechanism computes cross-attention relevance scores to adaptively choose features from the more informative modality at each spatial position. For temporal sequences, explicit temporal indicators (<em>"Image: t<sub>i</sub>"</em>) before each <code>[SEG]</code> token enable frame-specific mask decoding.</li>
+            <li><strong>Two-Stage Training:</strong> Stage 1 trains on 2M referring expression segmentation pairs for basic grounding; Stage 2 fine-tunes on 1M Terra-CoT samples with a combined language modeling loss and segmentation loss (Dice + pixel-wise cross-entropy).</li>
+        </ul>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="assets/method.png" alt="TerraScope Framework Overview" style="max-width: 100%; height: auto;" />
+            <p style="font-size: 0.9em; color: #555; margin-top: 8px;">Figure 2: Overview of the TerraScope framework.</p>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="examples">
         <h2>Examples</h2>
