@@ -340,7 +340,7 @@
         <ul>
             <li><strong>Grounded Captioning with Chain-of-Thought (Cap-CoT):</strong> We prompt a large multimodal model with images where land-cover categories are highlighted using colored masks and labeled accordingly, producing 250K captioning samples with explicit pixel-grounded reasoning traces. An intermediate annotator, <strong>TerraScope-Cap</strong>, is then trained to scale this to unlabeled imagery.</li>
             <li><strong>Hierarchical Data Synthesis — Level 1 (Basic Spatial Grounding):</strong> Template-based questions for randomly selected categories, covering fundamental spatial tasks such as existence verification, object counting, localization, area quantification, and boundary detection, each paired with pixel-grounded reasoning traces.</li>
-            <li><strong>Hierarchical Data Synthesis — Level 2 (Complex Multi-Step Reasoning):</strong> An LLM composes multiple L1 questions into complex reasoning tasks of two types: <em>L2-Spatial</em> (cross-entity relationship inference, e.g., "Is the water adjacent to the crops?") and <em>L2-Semantic</em> (domain knowledge beyond visual observation, e.g., "Is the region suitable for farming?").</li>
+            <li><strong>Hierarchical Data Synthesis — Level 2 (Complex Multi-Step Reasoning):</strong> An LLM composes multiple L1 questions into complex reasoning tasks of two types: <em>L2-Spatial</em> (cross-entity relationship inference) and <em>L2-Semantic</em> (domain knowledge beyond visual observation).</li>
         </ul>
         <p>
             This hierarchical process produces <strong>1M Terra-CoT samples</strong> with diverse reasoning abilities across optical, SAR, and temporal sources covering global regions.
