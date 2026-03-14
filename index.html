@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video-Browser: Towards Agentic Open-web Video Browsing</title>
+    <title>TerraScope: Pixel-Grounded Visual Reasoning for Earth Observation</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -257,7 +257,7 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <a href="#" class="nav-logo">Video-BrowseComp</a>
+        <a href="#" class="nav-logo">TerraScope</a>
         <div class="menu-toggle" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
@@ -276,15 +276,15 @@
 
 <div class="container">
     <header>
-        <h1>Video-Browser: Towards Agentic Open-web Video Browsing</h1>
+        <h1>TerraScope: Pixel-Grounded Visual Reasoning for Earth Observation</h1>
         
         <div class="author-block">
-            <strong>Zhengyang Liang<sup>1,♣</sup>, Yan Shu<sup>2,♣</sup>, Xiangrui Liu<sup>3</sup>, Minghao Qin<sup>3</sup>, Nicu Sebe<sup>2</sup>, Zheng Liu<sup>4</sup>, Lizi Liao<sup>1</sup></strong>
+            <strong>Yan Shu<sup>1</sup>, Bin Ren<sup>1</sup>, Zhitong Xiong<sup>3</sup>, Xiaoxiang Zhu<sup>3</sup>, Begüm Demir<sup>2</sup>, Nicu Sebe<sup>1</sup>, Paolo Rota<sup>1</sup></strong>
         </div>
 
         <div class="affiliation-block">
-            <sup>1</sup>Singapore Management University, <sup>2</sup>University of Trento, <br>
-            <sup>3</sup>Beijing Academy of Artificial Intelligence, <sup>4</sup>Hong Kong Polytechnic University
+            <sup>1</sup>University of Trento, <sup>2</sup>BIFOLD and TU Berlin, <br>
+            <sup>3</sup>Technical University of Munich
         </div>
 
         <div class="button-block">
@@ -297,9 +297,17 @@
     <section id="abstract">
         <h2>Abstract</h2>
         <div class="abstract-box">
-            The evolution of autonomous agents is redefining information seeking, transitioning from passive retrieval to proactive, open-ended web research. However, while textual and static multimodal agents have seen rapid progress, a significant modality gap remains in the web's most dynamic modality: video. Existing video benchmarks predominantly focus on passive perception, feeding curated clips to models without requiring external retrieval. They fail to evaluate agentic video research, which necessitates actively interrogating video timelines, cross-referencing dispersed evidence, and verifying claims against the open web. 
-            <br><br>
-            To bridge this gap, we present <strong>Video-BrowseComp</strong>, a challenging benchmark comprising 210 questions tailored for open-web agentic video reasoning. Unlike prior benchmarks, Video-BrowseComp enforces a mandatory dependency on temporal visual evidence, ensuring that answers cannot be derived solely through text search but require navigating video timelines to verify external claims. Our evaluation of state-of-the-art models reveals a critical bottleneck: even advanced search-augmented models like GPT-5.1 (w/ Search) achieve only 15.24% accuracy. Our analysis reveals that these models largely rely on textual proxies, excelling in metadata-rich domains (e.g., TV shows with plot summaries) but collapsing in metadata-sparse, dynamic environments (e.g., sports, gameplay) where visual grounding is essential. As the first open-web video research benchmark, Video-BrowseComp advances the field beyond passive perception toward proactive video reasoning.
+            Vision-language models (VLMs) have shown promise in earth observation (EO), 
+            yet they struggle with tasks that require grounding complex spatial reasoning 
+            in precise pixel-level visual representations. To address this problem, we introduce TerraScope, a unified VLM that delivers pixel-grounded geospatial reasoning with two key capabilities: (1) \textit{modality-flexible reasoning}: it handles single-modality inputs (optical or SAR) and adaptively fuses different modalities into the reasoning 
+            process when both are available; (2) \textit{multi-temporal reasoning}: it 
+            integrates temporal sequences for change analysis across multiple time points. In addition, we curate Terra-CoT, a large-scale dataset containing 1 million 
+            samples with pixel-level masks embedded in reasoning chains across multiple 
+            sources.
+            We also propose TerraScope-Bench, the first benchmark for pixel-grounded 
+            geospatial reasoning with six sub-tasks that evaluates both answer accuracy 
+            and mask quality to ensure authentic pixel-grounded reasoning.
+            Experiments show that TerraScope significantly outperforms existing VLMs on pixel-grounded geospatial reasoning while providing interpretable visual evidence.
         </div>
     </section>
 
